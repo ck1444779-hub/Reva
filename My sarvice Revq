@@ -1,0 +1,32 @@
+import android.accessibilityservice.AccessibilityService;
+import android.view.accessibility.AccessibilityNodeInfo;
+import android.view.accessibility.AccessibilityEvent;
+import android.content.Intent;
+import android.os.Bundle;
+
+public class MyJarvisService extends AccessibilityService {
+
+    @Override
+    public void onAccessibilityEvent(AccessibilityEvent event) {
+        // यहाँ आप इवेंट्स को कैप्चर कर सकते हैं और कमांड के हिसाब से एक्शन डिफाइन कर सकते हैं
+    }
+
+    @Override
+    public void onInterrupt() {
+        // सर्विस इंटरप्ट होने पर क्या हो
+    }
+
+    // किसी ऐप को ओपन करने या क्लिक करने का मेथड
+    public void performClickOnText(String textToFind) {
+        AccessibilityNodeInfo rootNode = getRootInActiveWindow();
+        if (rootNode != null) {
+            for (int i = 0; i < rootNode.getChildCount(); i++) {
+                AccessibilityNodeInfo node = rootNode.getChild(i);
+                if (node != null && node.getText() != null && node.getText().toString().equalsIgnoreCase(textToFind)) {
+                    node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    break;
+                }
+            }
+        }
+    }
+}
